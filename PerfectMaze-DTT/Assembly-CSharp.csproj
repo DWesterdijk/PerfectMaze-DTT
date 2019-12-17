@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\PrimsAlgorithm\GenerateGrid.cs" />
     <Compile Include="Assets\Scripts\PrimsAlgorithm\ManageCells.cs" />
+    <Compile Include="Assets\Scripts\UI\ButtonManager.cs" />
     <Reference Include="Unity.XR.Management">
       <HintPath>D:/Github/PerfectMaze-DTT/PerfectMaze-DTT/Library/ScriptAssemblies/Unity.XR.Management.dll</HintPath>
     </Reference>
