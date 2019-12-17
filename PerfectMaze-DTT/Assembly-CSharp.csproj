@@ -62,9 +62,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\GenerateGrid.cs" />
-    <Compile Include="Assets\Scripts\GenerateMaze.cs" />
-    <Compile Include="Assets\Scripts\ManageCells.cs" />
+    <Compile Include="Assets\Scripts\PrimsAlgorithm\GenerateGrid.cs" />
+    <Compile Include="Assets\Scripts\PrimsAlgorithm\ManageCells.cs" />
     <Reference Include="Unity.XR.Management">
       <HintPath>D:/Github/PerfectMaze-DTT/PerfectMaze-DTT/Library/ScriptAssemblies/Unity.XR.Management.dll</HintPath>
     </Reference>
