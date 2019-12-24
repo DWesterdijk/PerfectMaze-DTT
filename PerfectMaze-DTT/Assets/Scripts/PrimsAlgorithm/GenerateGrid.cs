@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class GenerateGrid : MonoBehaviour
@@ -17,10 +18,42 @@ public class GenerateGrid : MonoBehaviour
     private Material _mat;
     private int weight;
 
+    //UI
+    [Header("UI")]
+    [SerializeField]
+    private InputField _iFX;
+    [SerializeField]
+    private InputField _iFY;
+
+    // For initial startup with values set in Inspector.
     void Start()
     {
         GenerateGridFunc((int)gridSize.x, (int)gridSize.y);
         setAdjecents((int)gridSize.x, (int)gridSize.y);
+        SetRandomWeight();
+        SetStart();
+        FindNext();
+    }
+
+    // For any further startups after changing values in the UI.
+    public void StartGridGenerate()
+    {
+        Debug.Log("Restarting");
+        if (_iFX.text != "" && _iFY.text != "")
+        {
+            int x = int.Parse(_iFX.text);
+            int y = int.Parse(_iFY.text);
+
+            Debug.Log("X: " + x + ", Y: " + y);
+
+            GenerateGridFunc(x, y);
+            setAdjecents(x, y);
+        }
+        else
+        {
+            GenerateGridFunc((int)gridSize.x, (int)gridSize.y);
+            setAdjecents((int)gridSize.x, (int)gridSize.y);
+        }
         SetRandomWeight();
         SetStart();
         FindNext();
@@ -45,9 +78,29 @@ public class GenerateGrid : MonoBehaviour
                 _GridArray[x, y] = nextCell;
             }
         }
-        Camera.main.transform.position = new Vector3((gridX / 2) - 0.5f, (gridY / 2) - 0.5f, -10);
-        Camera.main.orthographicSize = Mathf.Max(gridX, gridY) / 2f;
+
+        if (gridX % 2 == 0 && gridY % 2 == 0) //Both X and Y are even
+        {
+            Camera.main.transform.position = new Vector3((gridX / 2) - 0.5f, (gridY / 2) - 0.5f, -10);
+            Camera.main.orthographicSize = Mathf.Max(gridX, gridY) / 2f;
+        }
+        if (gridX % 2 == 1 && gridY % 2 == 0) //Only X is odd
+        {
+            Camera.main.transform.position = new Vector3((gridX / 2), (gridY / 2) - 0.5f, -10);
+            Camera.main.orthographicSize = Mathf.Max(gridX, gridY) / 2f;
+        }
+        if (gridX % 2 == 1 && gridY % 2 == 1) //Both X and Y are odd
+        {
+            Camera.main.transform.position = new Vector3((gridX / 2), (gridY / 2), -10);
+            Camera.main.orthographicSize = Mathf.Max(gridX, gridY) / 2f;
+        }
+        if (gridX % 2 == 0 && gridY % 2 == 1) //Only Y is odd
+        {
+            Camera.main.transform.position = new Vector3((gridX / 2) - 0.5f, (gridY / 2), -10);
+            Camera.main.orthographicSize = Mathf.Max(gridX, gridY) / 2f;
+        }
     }
+
     void SetRandomWeight()
     {
         foreach (Transform children in transform)
@@ -67,7 +120,6 @@ public class GenerateGrid : MonoBehaviour
                 adjCell = _GridArray[x, y];
 
                 ManageCells manageCells = adjCell.GetComponent<ManageCells>();
-
 
                 //Remake this in a switch statement
                 if (x - 1 >= 0)
@@ -167,15 +219,6 @@ public class GenerateGrid : MonoBehaviour
             {
                 _setAdj[adj.GetComponent<ManageCells>().weight].Add(adj);
             }
-        }
-    }
-
-    private void Update()
-    {
-        //Reload scene
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene("SampleScene");
         }
     }
 }
